@@ -9,6 +9,8 @@ import com.example.comminicator.response.AuthResponse;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +35,7 @@ public class AuthService {
 
 
 
-    public AuthResponse createUserHandler(User user) throws UserException {
+    public ResponseEntity<AuthResponse> createUserHandler(User user) throws UserException {
 
         String email = user.getEmail();
         String password = user.getPassword();
@@ -50,7 +52,12 @@ public class AuthService {
         Authentication authentication = authenticateUser(email, password);
         String token = jwtTokenProvider.generateJwtToken(authentication);
 
-        return new AuthResponse(token, true);
+        AuthResponse authResponse= new AuthResponse();
+
+        authResponse.setStatus(true);
+        authResponse.setJwt(token);
+
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
 
