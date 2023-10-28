@@ -2,13 +2,12 @@ package com.example.comminicator.controller;
 
 import com.example.comminicator.exception.UserException;
 import com.example.comminicator.model.User;
+import com.example.comminicator.request.Login;
 import com.example.comminicator.response.AuthResponse;
 import com.example.comminicator.service.AuthService;
 import jakarta.validation.Valid;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +25,8 @@ public class AuthController {
         return authService.createUserHandler(user);
     }
 
-    
+    @PostMapping("/signin")
+    public AuthResponse signin(@RequestBody Login login) {
+       return  authService.signin(login);
+    }
 }
