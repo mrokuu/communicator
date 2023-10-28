@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -28,36 +29,31 @@ public class AuthService {
 
         String email = user.getEmail();
         String password = user.getPassword();
-        String full_name=user.getFull_name();
+        String fullName = user.getFullName();
 
-        Optional<User> isEmailExist=userRepository.findByEmail(email);
+        validateUserDoesNotExist(email);
 
-        if (isEmailExist.isPresent()) {
-            System.out.println("--------- exist "+isEmailExist.get().getEmail());
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setFullName(fullName);
+        newUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(newUser);
 
-            throw new UserException("Email Is Already Used With Another Account");
-        }
-
-        User createdUser= new User();
-        createdUser.setEmail(email);
-        createdUser.setFull_name(full_name);
-        createdUser.setPassword(passwordEncoder.encode(password));
-
-
-
-        userRepository.save(createdUser);
-
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        Authentication authentication = authenticateUser(email, password);
         String token = jwtTokenProvider.generateJwtToken(authentication);
 
-        AuthResponse authResponse= new AuthResponse();
+        return new AuthResponse(token, true);
+    }
 
-        authResponse.setStatus(true);
-        authResponse.setJwt(token);
 
-        return authResponse;
+
+    private void validateUserDoesNotExist(String email) throws UserException {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new UserException("Email is already used with another account");
+        }
+    }
+
+    private Authentication authenticateUser(String email, String password) {
+        return new UsernamePasswordAuthenticationToken(email, password, new ArrayList<>());
     }
 }

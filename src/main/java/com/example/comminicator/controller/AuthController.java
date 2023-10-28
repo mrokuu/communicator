@@ -23,9 +23,8 @@ public class AuthController {
 
     @PostMapping("/signup")
     public AuthResponse createUserHandler(@Valid @RequestBody User user) throws ExecutionControl.UserException, UserException {
-
-
         return authService.createUserHandler(user);
-
     }
+
+    
 }
