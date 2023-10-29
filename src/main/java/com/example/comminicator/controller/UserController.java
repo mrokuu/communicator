@@ -39,7 +39,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String jwt) {
         logger.info("Requesting user profile");
-        User user = userService.getUser(jwt);
+        User user = userService.findUserProfile(jwt);
         logger.info("Profile requested for user {}", user.getEmail());
         UserDto userDto=UserDtoMapper.toUserDTO(user);
 

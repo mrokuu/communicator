@@ -7,6 +7,7 @@ import com.example.comminicator.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,29 +20,43 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
-    private PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
     private UserRepository userRepo;
+
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    private final UserRepository userRepository;
 
     public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
+
         logger.info("Updating user with ID {}", userId);
-        Optional<User> userWithID = userRepository.findById(userId);
-        if(userWithID.isPresent()) {
-            User user=userWithID.get();
+        User user = findUserById(userId);
 
-            return user;
+        if(req.getFull_name() != null) {
+            user.setFullName(req.getFull_name());
         }
-        throw new UserException("user not exist with id "+userId);
+        if(req.getProfile_picture() != null) {
+            user.setProfilePicture(req.getProfile_picture());
+        }
+
+        return userRepo.save(user);
     }
 
-    public User getUser(String jwt) {
-        String jwtToken = jwtTokenProvider.getEmailFromToken(jwt);
-        return userRepository.findByEmail(jwtToken)
-                .orElseThrow(() -> new BadCredentialsException("Invalid token received"));
+
+    public User findUserById(Integer userId) throws UserException {
+        return userRepo.findById(userId)
+                .orElseThrow(() -> new UserException("User not exist with ID " + userId));
     }
+
+
+    public User findUserProfile(String jwt) {
+        String email = jwtTokenProvider.getEmailFromToken(jwt);
+        return userRepo.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Invalid token for email: " + email));
+    }
+
 
     public List<User> searchUser(String query) {
         logger.info("Searching for users with query {}", query);
