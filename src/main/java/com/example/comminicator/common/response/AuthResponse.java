@@ -1,4 +1,4 @@
-package com.example.comminicator.response;
+package com.example.comminicator.common.response;
 
 import lombok.*;
 

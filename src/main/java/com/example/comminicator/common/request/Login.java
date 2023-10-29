@@ -1,4 +1,4 @@
-package com.example.comminicator.request;
+package com.example.comminicator.common.request;
 
 import lombok.Data;
 import lombok.Getter;
