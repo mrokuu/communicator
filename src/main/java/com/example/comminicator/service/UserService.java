@@ -7,10 +7,12 @@ import com.example.comminicator.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.comminicator.configuration.JwtTokenProvider;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +35,16 @@ public class UserService {
             return user;
         }
         throw new UserException("user not exist with id "+userId);
+    }
+
+    public User getUser(String jwt) {
+        String jwtToken = jwtTokenProvider.getEmailFromToken(jwt);
+        return userRepository.findByEmail(jwtToken)
+                .orElseThrow(() -> new BadCredentialsException("Invalid token received"));
+    }
+
+    public List<User> searchUser(String query) {
+        logger.info("Searching for users with query {}", query);
+        return userRepo.searchUsers(query);
     }
 }
