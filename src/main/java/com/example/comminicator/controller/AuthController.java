@@ -6,7 +6,6 @@ import com.example.comminicator.model.User;
 import com.example.comminicator.repository.UserRepository;
 import com.example.comminicator.common.request.Login;
 import com.example.comminicator.common.response.AuthResponse;
-import com.example.comminicator.service.AuthService;
 import com.example.comminicator.service.CustomUserDetailsService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 public class AuthController {
 
-    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
