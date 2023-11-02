@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,34 +27,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
 public class AuthController {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private CustomUserDetailsService customUserDetails;
 
-    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService customUserDetails;
+
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException {
+    public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException{
 
         String email = user.getEmail();
         String password = user.getPassword();
-        String fullName = user.getFullName();
+        String full_name=user.getFullName();
 
-        validateUserDoesNotExist(email);
+        Optional<User> isEmailExist=userRepository.findByEmail(email);
 
-        User newUser = new User();
-        newUser.setEmail(email);
-        newUser.setFullName(fullName);
-        newUser.setPassword(passwordEncoder.encode(password));
-        userRepository.save(newUser);
+        // Check if user with the given email already exists
+        if (isEmailExist.isPresent()) {
+            throw new UserException("Email Is Already Used With Another Account");
+        }
 
-        Authentication authentication = authenticateUser(email, password);
+        // Create new user
+        User createdUser= new User();
+        createdUser.setEmail(email);
+        createdUser.setFullName(full_name);
+        createdUser.setPassword(passwordEncoder.encode(password));
+
+
+
+        userRepository.save(createdUser);
+
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         String token = jwtTokenProvider.generateJwtToken(authentication);
 
         AuthResponse authResponse= new AuthResponse();
@@ -61,61 +79,39 @@ public class AuthController {
         authResponse.setStatus(true);
         authResponse.setJwt(token);
 
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
+
     }
+
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody Login login) {
-        String username = login.getEmail();
-        String password = login.getPassword();
+    public ResponseEntity<AuthResponse> signin(@RequestBody Login loginRequest) {
+        String username = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
-        // Validate inputs
-        if (username == null || password == null) {
-            throw new IllegalArgumentException("Username and password must not be null");
-        }
+        Authentication authentication = authenticate(username, password);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        try {
-            Authentication authentication = authenticate(username, password);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String token = jwtTokenProvider.generateJwtToken(authentication);
-            AuthResponse authResponse = new AuthResponse();
-            authResponse.setStatus(true);
-            authResponse.setJwt(token);
+        String token = jwtTokenProvider.generateJwtToken(authentication);
+        AuthResponse authResponse= new AuthResponse();
 
-            return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Authentication failed for user: {}", username, e);
-            throw e;
-        }
+        authResponse.setStatus(true);
+        authResponse.setJwt(token);
+
+        return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
     }
 
-
-
-
-
-    private void validateUserDoesNotExist(String email) throws UserException {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new UserException("Email is already used with another account");
-        }
-    }
-
-    private Authentication authenticateUser(String email, String password) {
-        return new UsernamePasswordAuthenticationToken(email, password, new ArrayList<>());
-    }
-
-    public Authentication authenticate(String username, String password) {
+    private Authentication authenticate(String username, String password) {
         UserDetails userDetails = customUserDetails.loadUserByUsername(username);
 
+
         if (userDetails == null) {
-            logger.error("User not found: {}", username);
-            throw new UsernameNotFoundException("User not found");
+            throw new BadCredentialsException("Invalid username or password");
         }
-
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            logger.error("Password mismatch for user: {}", username);
-            throw new BadCredentialsException("Invalid credentials");
+            throw new BadCredentialsException("Invalid username or password");
         }
-
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
+
 }
