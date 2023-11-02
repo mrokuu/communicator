@@ -15,16 +15,13 @@ import java.util.Set;
 @Component
 public class JwtTokenProvider {
 
-    public static final String JWT_KEY="kzjjbeiurbZGyurZvzpaqekmeecfeeljliuogcerwmqzsduphbeheb";
-
-
-    SecretKey key = Keys.hmacShaKeyFor(JWT_KEY.getBytes());
+    SecretKey key = Keys.hmacShaKeyFor(SecurityConstant.JWT_KEY.getBytes());
 
     public String generateJwtToken(Authentication authentication) {
 
 
 
-        String jwt= Jwts.builder().setIssuer("Adam")
+        String jwt=Jwts.builder().setIssuer("Adam")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+86400000))
                 .claim("email", authentication.getName())

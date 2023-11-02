@@ -25,39 +25,45 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @AllArgsConstructor
 public class Security {
-
-
     @Bean
     public SecurityFilterChain securityAppConfig(HttpSecurity http) throws Exception {
-        http
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
+//		.authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
+//		.requestMatchers(HttpMethod.POST,"/auth/signin").permitAll()
+//		.requestMatchers(HttpMethod.GET,"/").permitAll()
+//		.anyRequest().authenticated().and()
                 .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
-                .csrf(c -> c.disable())
-                .cors()
-                .and()
+                .csrf().disable().cors().configurationSource(new CorsConfigurationSource() {
+
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                        CorsConfiguration cfg = new CorsConfiguration();
+
+                        cfg.setAllowedOrigins(Arrays.asList(
+
+                                "http://localhost:3000",
+                                "http://localhost:4000"));
+                        //cfg.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
+                        cfg.setAllowedMethods(Collections.singletonList("*"));
+                        cfg.setAllowCredentials(true);
+                        cfg.setAllowedHeaders(Collections.singletonList("*"));
+                        cfg.setExposedHeaders(Arrays.asList("Authorization"));
+                        cfg.setMaxAge(3600L);
+                        return cfg;
+
+                    }
+                }).and()
                 .formLogin()
                 .and()
-                .httpBasic(withDefaults());
+                .httpBasic();
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:4000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowCredentials(true);
-        config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("Authorization"));
-        config.setMaxAge(3600L);
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
 
     @Bean

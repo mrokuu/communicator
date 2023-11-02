@@ -24,40 +24,43 @@ import org.slf4j.LoggerFactory;
 
 public class JwtValidator extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtValidator.class);
-    public static final String JWT_KEY="kzjjbeiurbZGyurZvzpaqekmeecfeeljliuogcerwmqzsduphbeheb";
-    private static final String HEADER = "Authorization";
-    private SecretKey key;
-
-    public JwtValidator() {
-        key = Keys.hmacShaKeyFor(JWT_KEY.getBytes());
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String jwt = request.getHeader(HEADER);
-        logger.debug("Validating JWT: {}", jwt);
 
-        if (jwt != null && jwt.startsWith("Bearer ")) {
+
+        String jwt =request.getHeader(SecurityConstant.HEADER);
+
+        if(jwt != null) {
+
+
             try {
-                jwt = jwt.substring(7);
-                Claims claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
-                String username = claim.get("username", String.class);
-                String authorities = claim.get("authorities", String.class);
+                jwt=jwt.substring(7);
 
-                List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-                Authentication auth = new UsernamePasswordAuthenticationToken(username, null, auths);
+                SecretKey key=Keys.hmacShaKeyFor(SecurityConstant.JWT_KEY.getBytes());
+
+                Claims claim=Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+
+                String username=String.valueOf(claim.get("username"));
+                String authorities=String.valueOf(claim.get("authorities"));
+
+                List<GrantedAuthority> auths=AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+
+                Authentication auth=new UsernamePasswordAuthenticationToken(username, null,auths);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception e) {
-                logger.error("Invalid token", e);
-                throw new BadCredentialsException("Invalid token", e);
+                throw new BadCredentialsException("invalid token");
+                // TODO: handle exception
             }
-        }
 
+
+
+        }
         filterChain.doFilter(request, response);
+
+
     }
 }
