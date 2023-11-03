@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ChatRepository extends JpaRepository<Chat, Long> {
+public interface ChatRepository extends JpaRepository<Chat, Integer> {
 
     @Query("select c from Chat c join c.users u where u.id=:userId")
     public List<Chat> findChatByUserId(Integer userId);
