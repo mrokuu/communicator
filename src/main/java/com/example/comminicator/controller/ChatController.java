@@ -8,11 +8,14 @@ import com.example.comminicator.dto.ChatDto;
 import com.example.comminicator.exception.ChatException;
 import com.example.comminicator.exception.UserException;
 import com.example.comminicator.model.Chat;
+import com.example.comminicator.model.User;
 import com.example.comminicator.service.ChatService;
 import com.example.comminicator.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,78 +24,98 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chats")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ChatController {
-
-
-    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
-
-    private final ChatService chatService;
-    private final UserService userService;
-
-
+    @Autowired
+    private ChatService chatService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/single")
-    public ResponseEntity<ChatDto> createChatHandler(@RequestBody SingleChatRequest singleChatRequest,
-                                                     @RequestHeader("Authorization") String jwt) throws UserException {
-        logger.info("Creating single chat");
-        Chat chat = chatService.createChat(Math.toIntExact(userService.findUserProfile(jwt).getId()), Math.toIntExact(singleChatRequest.getUserId()), false);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> creatChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization")  String jwt) throws UserException{
+        User reqUser=userService.findUserProfile(jwt);
+
+        Chat chat=chatService.createChat(reqUser.getId(),singleChatRequest.getUserId(),false);
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
     }
 
     @PostMapping("/group")
-    public ResponseEntity<ChatDto> createGroupHandler(@RequestBody GroupChatRequest groupChatRequest,
-                                                      @RequestHeader("Authorization") String jwt) throws UserException {
-        logger.info("Creating group chat");
-        Chat chat = chatService.createGroup(groupChatRequest, Math.toIntExact(userService.findUserProfile(jwt).getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> createGroupHandler(@RequestBody GroupChatRequest groupChatRequest, @RequestHeader("Authorization") String jwt) throws UserException{
+
+        User reqUser=userService.findUserProfile(jwt);
+
+        Chat chat=chatService.createGroup(groupChatRequest, reqUser.getId());
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
+
     }
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<ChatDto> findChatByIdHandler(@PathVariable  Integer chatId) throws ChatException {
-        logger.info("Fetching chat with ID: {}", chatId);
-        Chat chat = chatService.findChatById(chatId);
-        return ResponseEntity.ok(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> findChatByIdHandler(@PathVariable Integer chatId) throws ChatException{
+
+        Chat chat =chatService.findChatById(chatId);
+
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
+
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<ChatDto>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt) throws UserException {
-        logger.info("Fetching all chats for user");
-        List<Chat> chats = chatService.findAllChatByUserId(Math.toIntExact(userService.findUserProfile(jwt).getId()));
-        return ResponseEntity.ok(ChatMapper.toChatDtos(chats));
+    public ResponseEntity<List<ChatDto>> findAllChatByUserIdHandler(@RequestHeader("Authorization")String jwt) throws UserException{
+
+        User user=userService.findUserProfile(jwt);
+
+        List<Chat> chats=chatService.findAllChatByUserId(user.getId());
+
+        List<ChatDto> chatDtos=ChatMapper.toChatDtos(chats);
+
+        return new ResponseEntity<List<ChatDto>>(chatDtos,HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{chatId}/add/{userId}")
-    public ResponseEntity<ChatDto> addUserToGroupHandler(@PathVariable  Integer chatId,
-                                                         @PathVariable  Integer userId) throws UserException, ChatException {
-        logger.info("Adding user {} to chat {}", userId, chatId);
-        Chat chat = chatService.addUserToGroup(userId, chatId);
-        return ResponseEntity.ok(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> addUserToGroupHandler(@PathVariable Integer chatId,@PathVariable Integer userId) throws UserException, ChatException{
+
+        Chat chat=chatService.addUserToGroup(userId, chatId);
+
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
     }
 
     @PutMapping("/{chatId}/rename")
-    public ResponseEntity<ChatDto> renameGroupHandler(@PathVariable  Integer chatId,
-                                                      @RequestBody RenameGroupRequest renameGroupRequest,
-                                                      @RequestHeader("Authorization") String jwt) throws ChatException, UserException {
-        logger.info("Renaming chat {} to {}", chatId, renameGroupRequest.getGroupName());
-        Chat chat = chatService.renameGroup(chatId, renameGroupRequest.getGroupName(), Math.toIntExact(userService.findUserProfile(jwt).getId()));
-        return ResponseEntity.ok(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> renameGroupHandler(@PathVariable Integer chatId,@RequestBody RenameGroupRequest renameGoupRequest, @RequestHeader("Autorization") String jwt) throws ChatException, UserException{
+
+        User reqUser=userService.findUserProfile(jwt);
+
+        Chat chat =chatService.renameGroup(chatId, renameGoupRequest.getGroupName(), reqUser.getId());
+
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
     }
 
     @PutMapping("/{chatId}/remove/{userId}")
-    public ResponseEntity<ChatDto> removeFromGroupHandler(@PathVariable  Integer chatId,
-                                                          @PathVariable  Integer userId,
-                                                          @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
-        logger.info("Removing user {} from chat {}", userId, chatId);
-        Chat chat = chatService.removeFromGroup(chatId, userId, Math.toIntExact(userService.findUserProfile(jwt).getId()));
-        return ResponseEntity.ok(ChatMapper.toChatDto(chat));
+    public ResponseEntity<ChatDto> removeFromGroupHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer chatId,@PathVariable Integer userId) throws UserException, ChatException{
+
+        User reqUser=userService.findUserProfile(jwt);
+
+        Chat chat=chatService.removeFromGroup(chatId, userId, reqUser.getId());
+
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
     }
 
-    @DeleteMapping("/{chatId}/{userId}")
-    public ResponseEntity<ChatDto> deleteChatHandler(@PathVariable  Integer chatId,
-                                                     @PathVariable  Integer userId) throws ChatException, UserException {
-        logger.info("Deleting chat {} for user {}", chatId, userId);
-        Chat chat = chatService.deleteChat(chatId, userId);
-        return ResponseEntity.ok(ChatMapper.toChatDto(chat));
+    @DeleteMapping("/delete/{chatId}/{userId}")
+    public ResponseEntity<ChatDto> deleteChatHandler(@PathVariable Integer chatId, @PathVariable Integer userId) throws ChatException, UserException{
+
+        Chat chat=chatService.deleteChat(chatId, userId);
+        ChatDto chatDto=ChatMapper.toChatDto(chat);
+
+        return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
     }
 }
