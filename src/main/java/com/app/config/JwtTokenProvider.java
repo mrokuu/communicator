@@ -26,7 +26,7 @@ public class JwtTokenProvider {
 		
 		
 		
-		String jwt=Jwts.builder().setIssuer("Code With Zosh")
+		String jwt=Jwts.builder().setIssuer("Adam")
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(new Date().getTime()+86400000))
 				.claim("email", authentication.getName())

@@ -32,8 +32,7 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 		
 		String jwt =request.getHeader(SecurityConstant.HEADER);
 		
-		System.out.println("validator jwt -------- "+jwt);
-	
+
 		if(jwt != null) {
 			
 			
@@ -54,7 +53,6 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 				
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			} catch (Exception e) {
-				System.out.println("invalid token recived...................");
 				throw new BadCredentialsException("invalid token");
 				// TODO: handle exception
 			}
@@ -66,9 +64,6 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 		
 		
 	}
-	
-//	protected boolean shouldNotFilter(HttpServletRequest request) {
-//		return request.getServletPath().equals("/sigin");
-//	}
+
 
 }
