@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.app.service.MessageService;
 import com.app.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.controller.mapper.MessageDtoMapper;
+import com.app.controller.mapper.MessageMapper;
 import com.app.dto.MessageDto;
 import com.app.exception.ChatException;
 import com.app.exception.MessageException;
@@ -28,12 +29,12 @@ import com.app.response.ApiResponse;
 
 @RestController
 @RequestMapping("/api/messages")
+@AllArgsConstructor
 public class MessageController {
 
-	@Autowired
 	private MessageService messageService;
 	
-	@Autowired
+
 	private UserService userService;
 	
 	@PostMapping("/create")
@@ -45,7 +46,7 @@ public class MessageController {
 		
 		Message message=messageService.sendMessage(req);
 		
-		MessageDto messageDto=MessageDtoMapper.toMessageDto(message);
+		MessageDto messageDto= MessageMapper.toMessageDto(message);
 		
 		return new ResponseEntity<MessageDto>(messageDto,HttpStatus.OK);
 	}
@@ -55,7 +56,7 @@ public class MessageController {
 		
 		List<Message> messages=messageService.getChatsMessages(chatId);
 		
-		List<MessageDto> messageDtos=MessageDtoMapper.toMessageDtos(messages);
+		List<MessageDto> messageDtos= MessageMapper.toMessageDtos(messages);
 		
 		return new ResponseEntity<List<MessageDto>>(messageDtos,HttpStatus.ACCEPTED);
 		

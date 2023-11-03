@@ -11,14 +11,14 @@ import com.app.dto.MessageDto;
 import com.app.dto.UserDto;
 import com.app.modal.Chat;
 
-public class ChatDtoMapper {
+public class ChatMapper {
 	
 	public static ChatDto toChatDto(Chat chat) {
 		
-		UserDto userDto=UserDtoMapper.toUserDTO(chat.getCreated_by());
-		List<MessageDto> messageDtos=MessageDtoMapper.toMessageDtos(chat.getMessages());
-		Set<UserDto> userDtos=UserDtoMapper.toUserDtos(chat.getUsers());
-		Set<UserDto> admins=UserDtoMapper.toUserDtos(chat.getAdmins());
+		UserDto userDto= UserMapper.toUserDTO(chat.getCreated_by());
+		List<MessageDto> messageDtos= MessageMapper.toMessageDtos(chat.getMessages());
+		Set<UserDto> userDtos= UserMapper.toUserDtos(chat.getUsers());
+		Set<UserDto> admins= UserMapper.toUserDtos(chat.getAdmins());
 		
 		ChatDto chatDto=new ChatDto();
 		chatDto.setId(chat.getId());

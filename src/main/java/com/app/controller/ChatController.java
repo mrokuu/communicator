@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.app.service.ChatService;
 import com.app.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.controller.mapper.ChatDtoMapper;
+import com.app.controller.mapper.ChatMapper;
 import com.app.dto.ChatDto;
 import com.app.exception.ChatException;
 import com.app.exception.UserException;
@@ -29,14 +30,13 @@ import com.app.request.SingleChatRequest;
 
 @RestController
 @RequestMapping("/api/chats")
+@AllArgsConstructor
 public class ChatController {
 
 //	private ChatRepository chatRepo;
 	
-	@Autowired
 	private ChatService chatService;
 	
-	@Autowired
 	private UserService userService;
 	
 	@PostMapping("/single")
@@ -45,7 +45,7 @@ public class ChatController {
 		User reqUser=userService.findUserProfile(jwt);
 		
 		Chat chat=chatService.createChat(reqUser.getId(),singleChatRequest.getUserId(),false);
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 	}
@@ -56,7 +56,7 @@ public class ChatController {
 		User reqUser=userService.findUserProfile(jwt);
 		
 		Chat chat=chatService.createGroup(groupChatRequest, reqUser.getId());
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 		
@@ -67,7 +67,7 @@ public class ChatController {
 		
 		Chat chat =chatService.findChatById(chatId);
 		
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 		
@@ -80,7 +80,7 @@ public class ChatController {
 		
 		List<Chat> chats=chatService.findAllChatByUserId(user.getId());
 		
-		List<ChatDto> chatDtos=ChatDtoMapper.toChatDtos(chats);
+		List<ChatDto> chatDtos= ChatMapper.toChatDtos(chats);
 		
 		return new ResponseEntity<List<ChatDto>>(chatDtos,HttpStatus.ACCEPTED);
 	}
@@ -90,7 +90,7 @@ public class ChatController {
 		
 		Chat chat=chatService.addUserToGroup(userId, chatId);
 		
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 	}
@@ -102,7 +102,7 @@ public class ChatController {
 		
 		Chat chat =chatService.renameGroup(chatId, renameGoupRequest.getGroupName(), reqUser.getId());
 		
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 	}
@@ -114,7 +114,7 @@ public class ChatController {
 		
 		Chat chat=chatService.removeFromGroup(chatId, userId, reqUser.getId());
 		
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 	}
@@ -123,7 +123,7 @@ public class ChatController {
 	public ResponseEntity<ChatDto> deleteChatHandler(@PathVariable Integer chatId, @PathVariable Integer userId) throws ChatException, UserException{
 		
 		Chat chat=chatService.deleteChat(chatId, userId);
-		ChatDto chatDto=ChatDtoMapper.toChatDto(chat);
+		ChatDto chatDto= ChatMapper.toChatDto(chat);
 		
 		return new ResponseEntity<ChatDto>(chatDto,HttpStatus.OK);
 	}

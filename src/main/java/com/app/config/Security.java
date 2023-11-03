@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 @Configuration
-public class AppConfig {
+public class Security {
 	
 	@Bean
 	public SecurityFilterChain securityAppConfig(HttpSecurity http) throws Exception {

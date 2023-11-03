@@ -6,7 +6,7 @@ import java.util.Set;
 import com.app.dto.UserDto;
 import com.app.modal.User;
 
-public class UserDtoMapper {
+public class UserMapper {
 
 	
 	public static UserDto toUserDTO(User user) {

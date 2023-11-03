@@ -8,13 +8,13 @@ import com.app.dto.MessageDto;
 import com.app.dto.UserDto;
 import com.app.modal.Message;
 
-public class MessageDtoMapper {
+public class MessageMapper {
 	
 	
 	public static MessageDto toMessageDto(Message message) {
 		
-		ChatDto chatDto=ChatDtoMapper.toChatDto(message.getChat());
-		UserDto userDto=UserDtoMapper.toUserDTO(message.getUser());
+		ChatDto chatDto= ChatMapper.toChatDto(message.getChat());
+		UserDto userDto= UserMapper.toUserDTO(message.getUser());
 		
 		MessageDto messageDto=new MessageDto();
 		messageDto.setId(message.getId());

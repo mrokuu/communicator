@@ -43,6 +43,7 @@ public class MessageService {
 		message.setContent(req.getContent());
 		message.setTimeStamp(LocalDateTime.now());
 		message.setIs_read(false);
+
 		
 		
 		return messageRepo.save(message);

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.app.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.controller.mapper.UserDtoMapper;
+import com.app.controller.mapper.UserMapper;
 import com.app.dto.UserDto;
 import com.app.exception.UserException;
 import com.app.modal.User;
@@ -24,16 +25,16 @@ import com.app.request.UpdateUserRequest;
 
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
 	
-	@Autowired
 	private UserService userService;
 	
 	
 	@PutMapping("/update/{userId}")
 	public ResponseEntity<UserDto> updateUserHandler(@RequestBody UpdateUserRequest req, @PathVariable Integer userId) throws UserException{
 		User updatedUser=userService.updateUser(userId, req);
-		UserDto userDto=UserDtoMapper.toUserDTO(updatedUser);
+		UserDto userDto= UserMapper.toUserDTO(updatedUser);
 
 		return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
 	}
@@ -43,7 +44,7 @@ public class UserController {
 
 		User user=userService.findUserProfile(jwt);
 		
-		UserDto userDto=UserDtoMapper.toUserDTO(user);
+		UserDto userDto= UserMapper.toUserDTO(user);
 		
 
 		return new ResponseEntity<UserDto>(userDto,HttpStatus.ACCEPTED);
@@ -57,7 +58,7 @@ public class UserController {
         
         HashSet<User> set=new HashSet<>(users);
         
-        HashSet<UserDto> userDtos=UserDtoMapper.toUserDtos(set);
+        HashSet<UserDto> userDtos= UserMapper.toUserDtos(set);
         
 
 		return new ResponseEntity<>(userDtos,HttpStatus.ACCEPTED);
