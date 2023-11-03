@@ -13,17 +13,17 @@ public class ChatMapper {
 
     public static ChatDto toChatDto(Chat chat) {
 
-        UserDto userDto=UserDtoMapper.toUserDTO(chat.getCreated_by());
+        UserDto userDto=UserDtoMapper.toUserDTO(chat.getCreatedBy());
         List<MessageDto> messageDtos=MessageMapper.toMessageDtos(chat.getMessages());
         Set<UserDto> userDtos=UserDtoMapper.toUserDtos(chat.getUsers());
         Set<UserDto> admins=UserDtoMapper.toUserDtos(chat.getAdmins());
 
         ChatDto chatDto=new ChatDto();
         chatDto.setId(chat.getId());
-        chatDto.setChat_image(chat.getChatImage());
-        chatDto.setChat_name(chat.getChatName());
+        chatDto.setChatImage(chat.getChatImage());
+        chatDto.setChatName(chat.getChatName());
         chatDto.setCreated_by(userDto);
-        chatDto.setIs_group(chat.getIs_group());
+        chatDto.setIs_group(chat.getIsGroup());
         chatDto.setMessages(messageDtos);
         chatDto.setUsers(userDtos);
         chatDto.setAdmins(admins);

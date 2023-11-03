@@ -16,8 +16,8 @@ import java.util.Set;
 public class ChatDto {
 
     private Integer id;
-    private String chat_name;
-    private String chat_image;
+    private String chatName;
+    private String chatImage;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean is_group;

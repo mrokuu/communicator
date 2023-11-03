@@ -40,10 +40,10 @@ public class ChatService {
 
         Chat chat=new Chat();
 
-        chat.setCreated_by(reqUser);
+        chat.setCreatedBy(reqUser);
         chat.getUsers().add(reqUser);
         chat.getUsers().add(user2);
-        chat.setIs_group(false);
+        chat.setIsGroup(false);
 
         Chat createdChat = chatRepository.save(chat);
 
@@ -80,7 +80,7 @@ public class ChatService {
         User user=userService.findUserById(userId);
         Chat chat=findChatById(chatId);
 
-        if((chat.getCreated_by().getId().equals(user.getId())) && !chat.getIs_group() ) {
+        if((chat.getCreatedBy().getId().equals(user.getId())) && !chat.getIsGroup() ) {
             chatRepository.deleteById(chat.getId());
 
             return chat;
@@ -99,7 +99,7 @@ public class ChatService {
 
         Chat chat=new Chat();
 
-        chat.setCreated_by(reqUser);
+        chat.setCreatedBy(reqUser);
         chat.getUsers().add(reqUser);
 
         for(Integer userId:req.getUserIds()) {
@@ -109,7 +109,7 @@ public class ChatService {
 
         chat.setChatName(req.getChatName());
         chat.setChatImage(req.getChatImage());
-        chat.setIs_group(true);
+        chat.setIsGroup(true);
         chat.getAdmins().add(reqUser);
 
         return chatRepository.save(chat);
@@ -117,7 +117,7 @@ public class ChatService {
     }
 
 
-  
+
     public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
 
         Chat chat =findChatById(chatId);

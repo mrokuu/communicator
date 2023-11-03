@@ -33,11 +33,11 @@ public class UserService {
     public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
 
         User user=findUserById(userId);
-        if(req.getFull_name()!=null) {
-            user.setFullName(req.getFull_name());
+        if(req.getFullName()!=null) {
+            user.setFullName(req.getFullName());
         }
-        if(req.getProfile_picture()!=null) {
-            user.setProfilePicture(req.getProfile_picture());
+        if(req.getProfilePicture()!=null) {
+            user.setProfilePicture(req.getProfilePicture());
         }
 
         return userRepo.save(user);

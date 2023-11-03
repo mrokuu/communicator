@@ -25,10 +25,10 @@ public class Chat {
     @ManyToMany
     private Set<User> admins=new HashSet<>();
 
-    private Boolean is_group;
+    private Boolean isGroup;
 
     @ManyToOne
-    private User created_by;
+    private User createdBy;
 
     @ManyToMany
     @JoinTable(
@@ -46,7 +46,7 @@ public class Chat {
     @Override
     public String toString() {
         return "Chat [id=" + id + ", chat_name=" + chatName + ", chat_image=" + chatImage + ", admins=" + admins
-                + ", is_group=" + is_group + ", created_by=" + created_by + ", users=" + users + ", messages="
+                + ", is_group=" + isGroup + ", created_by=" + createdBy + ", users=" + users + ", messages="
                 + messages + "]";
     }
 }
