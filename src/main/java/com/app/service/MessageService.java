@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,16 @@ import com.app.repository.MessageRepository;
 import com.app.request.SendMessageRequest;
 
 @Service
+@AllArgsConstructor
 public class MessageService {
 	
-	@Autowired
+
 	private MessageRepository messageRepo;
 	
-	@Autowired
+
 	private UserService userService;
 	
-	@Autowired
+
 	private ChatService chatService;
 	
 	  

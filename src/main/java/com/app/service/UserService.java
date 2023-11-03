@@ -3,6 +3,7 @@ package com.app.service;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,15 +16,16 @@ import com.app.repository.UserRepository;
 import com.app.request.UpdateUserRequest;
 
 @Service
+@AllArgsConstructor
 public class UserService  {
 	
-	@Autowired
+
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
+
 	private UserRepository userRepo;
 	
-	@Autowired
+
 	private JwtTokenProvider jwtTokenProvider;
 
 
