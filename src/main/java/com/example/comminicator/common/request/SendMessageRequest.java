@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SendMessageRequest {
 
-    private Long chatId;
-    private Long userId;
+    private Integer chatId;
+    private Integer userId;
     private String content;
 }

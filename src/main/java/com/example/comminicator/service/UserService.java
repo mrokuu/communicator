@@ -20,24 +20,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
 
-        logger.info("Updating user with ID {}", userId);
-        User user = findUserById(userId);
-
-        if(req.getFull_name() != null) {
+        User user=findUserById(userId);
+        if(req.getFull_name()!=null) {
             user.setFullName(req.getFull_name());
         }
-        if(req.getProfile_picture() != null) {
+        if(req.getProfile_picture()!=null) {
             user.setProfilePicture(req.getProfile_picture());
         }
 
@@ -46,20 +45,33 @@ public class UserService {
 
 
     public User findUserById(Integer userId) throws UserException {
-        return userRepo.findById(userId)
-                .orElseThrow(() -> new UserException("User not exist with ID " + userId));
+
+        Optional<User> opt=userRepo.findById(userId);
+
+        if(opt.isPresent()) {
+            User user=opt.get();
+
+            return user;
+        }
+        throw new UserException("user not exist with id "+userId);
     }
 
 
     public User findUserProfile(String jwt) {
         String email = jwtTokenProvider.getEmailFromToken(jwt);
-        return userRepo.findByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("Invalid token for email: " + email));
+
+        Optional<User> opt=userRepo.findByEmail(email);
+
+        if(opt.isPresent()) {
+            return opt.get();
+        }
+
+        throw new BadCredentialsException("recive invalid token");
     }
 
 
     public List<User> searchUser(String query) {
-        logger.info("Searching for users with query {}", query);
         return userRepo.searchUsers(query);
+
     }
 }
