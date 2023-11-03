@@ -9,5 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SingleChatRequest {
 
-    private Long userId;
+    private Integer userId;
 }

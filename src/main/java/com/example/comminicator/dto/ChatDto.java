@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ChatDto {
 
-    private Long id;
+    private Integer id;
     private String chat_name;
     private String chat_image;
 

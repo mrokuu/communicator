@@ -11,7 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class UserDto {
 
-    private Long id;
+    private Integer id;
     private String fullName;
     private String email;
     private String profilePicture;

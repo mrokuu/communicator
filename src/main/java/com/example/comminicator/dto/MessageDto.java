@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MessageDto {
 
-    private Long id;
+    private Integer id;
     private LocalDateTime timeStamp;
     private Boolean is_read;
     private UserDto user;
