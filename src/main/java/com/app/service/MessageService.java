@@ -22,7 +22,7 @@ import com.app.request.SendMessageRequest;
 public class MessageService {
 	
 
-	private MessageRepository messageRepo;
+	private MessageRepository messageRepository;
 	
 
 	private UserService userService;
@@ -36,29 +36,36 @@ public class MessageService {
 	public Message sendMessage(SendMessageRequest req) throws UserException, ChatException {
 		
 
-		User user=userService.findUserById(req.getUserId());
-		Chat chat=chatService.findChatById(req.getChatId());
+		User userById=userService.findUserById(req.getUserId());
+		Chat chatById=chatService.findChatById(req.getChatId());
+
+		Message message = Message.builder()
+				.chat(chatById)
+				.user(userById)
+				.content(req.getContent())
+				.timeStamp(LocalDateTime.now())
+				.is_read(false)
+				.build();
 		
-		Message message=new Message();
-		message.setChat(chat);
-		message.setUser(user);
-		message.setContent(req.getContent());
-		message.setTimeStamp(LocalDateTime.now());
-		message.setIs_read(false);
+//		Message message=new Message();
+//		message.setChat(chat);
+//		message.setUser(user);
+//		message.setContent(req.getContent());
+//		message.setTimeStamp(LocalDateTime.now());
+//		message.setIs_read(false);
 
 		
 		
-		return messageRepo.save(message);
+		return messageRepository.save(message);
 	}
 
 
-	public String deleteMessage(Integer messageId) throws MessageException {
+	public void deleteMessage(Integer messageId) throws MessageException {
 		
 		Message message=findMessageById(messageId);
-		
-		messageRepo.deleteById(message.getId());
-		
-		return "message deleted successfully";
+
+		messageRepository.deleteById(message.getId());
+
 	}
 
 
@@ -66,7 +73,7 @@ public class MessageService {
 		
 		Chat chat=chatService.findChatById(chatId);
 		
-		List<Message> messages=messageRepo.findMessageByChatId(chatId);
+		List<Message> messages=messageRepository.findMessageByChatId(chatId);
 		
 		return messages;
 	}
@@ -74,7 +81,7 @@ public class MessageService {
 
 	public Message findMessageById(Integer messageId) throws MessageException {
 		
-		Optional<Message> message =messageRepo.findById(messageId);
+		Optional<Message> message =messageRepository.findById(messageId);
 		
 		if(message.isPresent()) {
 			return message.get();

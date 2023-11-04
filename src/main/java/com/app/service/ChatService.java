@@ -98,22 +98,31 @@ public class ChatService {
 
 	public Chat createGroup(GroupChatRequest req,Integer reqUserId) throws UserException {
 		
-		User reqUser=userService.findUserById(reqUserId);
+		User userById=userService.findUserById(reqUserId);
+
+
+		Chat chat = Chat.builder()
+				.created_by(userById)
+				.chat_name(req.getChat_name())
+				.chat_image(req.getChat_image())
+				.is_group(true)
+				.build();
 		
-		Chat chat=new Chat();
+//		Chat chat=new Chat();
 		
-		chat.setCreated_by(reqUser);
-		chat.getUsers().add(reqUser);
+//		chat.setCreated_by(reqUser);
+		chat.getUsers().add(userById);
+		chat.getAdmins().add(userById);
 		
 		for(Integer userId:req.getUserIds()) {
 			User user =userService.findUserById(userId);
 			if(user!=null)chat.getUsers().add(user);
 		}
 		
-		chat.setChat_name(req.getChat_name());
-		chat.setChat_image(req.getChat_image());
-		chat.setIs_group(true);
-		chat.getAdmins().add(reqUser);
+//		chat.setChat_name(req.getChat_name());
+//		chat.setChat_image(req.getChat_image());
+//		chat.setIs_group(true);
+
 		
 		return chatRepository.save(chat);
 		

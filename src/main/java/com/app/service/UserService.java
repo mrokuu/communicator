@@ -23,7 +23,7 @@ public class UserService  {
 	private PasswordEncoder passwordEncoder;
 	
 
-	private UserRepository userRepo;
+	private UserRepository userRepository;
 	
 
 	private JwtTokenProvider jwtTokenProvider;
@@ -41,13 +41,13 @@ public class UserService  {
 			user.setProfile_picture(req.getProfile_picture());
 		}
 		
-		return userRepo.save(user);
+		return userRepository.save(user);
 	}
 
 
 	public User findUserById(Integer userId) throws UserException {
 		
-		Optional<User> opt=userRepo.findById(userId);
+		Optional<User> opt=userRepository.findById(userId);
 		
 		if(opt.isPresent()) {
 			User user=opt.get();
@@ -61,7 +61,7 @@ public class UserService  {
 	public User findUserProfile(String jwt) {
 		String email = jwtTokenProvider.getEmailFromToken(jwt);
 		
-		Optional<User> opt=userRepo.findByEmail(email);
+		Optional<User> opt=userRepository.findByEmail(email);
 		
 		if(opt.isPresent()) {
 			return opt.get();
@@ -72,7 +72,7 @@ public class UserService  {
 
 
 	public List<User> searchUser(String query) {
-		return userRepo.searchUsers(query);
+		return userRepository.searchUsers(query);
 		
 	}
 	
