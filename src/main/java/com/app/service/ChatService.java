@@ -21,45 +21,43 @@ public class ChatService {
 	
 	private UserService userService;
 	
-	private ChatRepository chatRepo;
+	private ChatRepository chatRepository;
 
 
 	public Chat createChat(Integer reqUserId, Integer userId2, boolean isGroup) throws UserException {
-		
-		
-		
 		User reqUser=userService.findUserById(reqUserId);
 		User user2 = userService.findUserById(userId2);
-		
 
-		Chat isChatExist = chatRepo.findSingleChatByUsersId(user2, reqUser);
+		Chat isChatExist = chatRepository.findSingleChatByUsersId(user2, reqUser);
 		
 
 		if(isChatExist!=null) {
 			return isChatExist;
 		}
 		
-		Chat chat=new Chat();
+		Chat chat=new Chat().builder()
+				.created_by(reqUser)
+				.is_group(false)
+				.build();
 		
-		chat.setCreated_by(reqUser);
+
 		chat.getUsers().add(reqUser);
 		chat.getUsers().add(user2);
-		chat.setIs_group(false);
+
 		
-		Chat createdChat = chatRepo.save(chat);
-		
-//		
+		Chat createdChat = chatRepository.save(chat);
+
 		
 		return createdChat;
 	}
 
 	
-	
+
 
 
 	public Chat findChatById(Integer chatId) throws ChatException {
 		
-		Optional<Chat> chat =chatRepo.findById(chatId);
+		Optional<Chat> chat =chatRepository.findById(chatId);
 		
 		if(chat.isPresent()) {
 			return chat.get();
@@ -73,7 +71,7 @@ public class ChatService {
 
 		User user=userService.findUserById(userId);
 		
-		List<Chat> chats=chatRepo.findChatByUserId(user.getId());
+		List<Chat> chats=chatRepository.findChatByUserId(user.getId());
 		
 
 		return chats;
@@ -81,16 +79,16 @@ public class ChatService {
 	
 
 	public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
-		
+
 		User user=userService.findUserById(userId);
 		Chat chat=findChatById(chatId);
-		
+
 		if((chat.getCreated_by().getId().equals(user.getId())) && !chat.getIs_group() ) {
-			chatRepo.deleteById(chat.getId());
-			
+			chatRepository.deleteById(chat.getId());
+
 			return chat;
 		}
-		
+
 		throw new ChatException("you dont have access to delete this chat");
 	}
 
@@ -117,7 +115,7 @@ public class ChatService {
 		chat.setIs_group(true);
 		chat.getAdmins().add(reqUser);
 		
-		return chatRepo.save(chat);
+		return chatRepository.save(chat);
 		
 	}
 
@@ -131,7 +129,7 @@ public class ChatService {
 		chat.getUsers().add(user);
 		
 		
-		Chat updatedChat=chatRepo.save(chat);
+		Chat updatedChat=chatRepository.save(chat);
 		
 		return updatedChat;
 	}
@@ -149,7 +147,7 @@ public class ChatService {
 		if(chat.getUsers().contains(user))
 		chat.setChat_name(groupName);
 		
-		return chatRepo.save(chat);
+		return chatRepository.save(chat);
 	}
 
 	public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUserId) throws UserException, ChatException {
