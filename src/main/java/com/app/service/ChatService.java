@@ -2,6 +2,7 @@ package com.app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -100,32 +101,33 @@ public class ChatService {
 		
 		User userById=userService.findUserById(reqUserId);
 
-
-		Chat chat = Chat.builder()
-				.created_by(userById)
-				.chat_name(req.getChat_name())
-				.chat_image(req.getChat_image())
-				.is_group(true)
-				.build();
-		
-//		Chat chat=new Chat();
-		
-//		chat.setCreated_by(reqUser);
+		Chat chat=new Chat();
+		chat.setCreated_by(userById);
 		chat.getUsers().add(userById);
 		chat.getAdmins().add(userById);
-		
+		chat.setChat_name(req.getChat_name());
+		chat.setChat_image(req.getChat_image());
+		chat.setIs_group(true);
+
+//		Chat chat = Chat.builder()
+//				.created_by(userById)
+//				.chat_name(req.getChat_name())
+//				.chat_image(req.getChat_image())
+//				.is_group(true)
+//				.users((Set<User>) userById)
+//				.admins((Set<User>) userById)
+//				.build();
+
 		for(Integer userId:req.getUserIds()) {
 			User user =userService.findUserById(userId);
 			if(user!=null)chat.getUsers().add(user);
 		}
-		
-//		chat.setChat_name(req.getChat_name());
-//		chat.setChat_image(req.getChat_image());
-//		chat.setIs_group(true);
 
-		
+
+
+
 		return chatRepository.save(chat);
-		
+
 	}
 
 
