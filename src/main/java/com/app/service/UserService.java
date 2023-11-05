@@ -30,44 +30,26 @@ public class UserService  {
 
 
 	public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
-		
-		User user=findUserById(userId);
-		
+		User user = findUserById(userId);
 
-		if(req.getFull_name()!=null) {
-			user.setFull_name(req.getFull_name());
-		}
-		if(req.getProfile_picture()!=null) {
-			user.setProfile_picture(req.getProfile_picture());
-		}
-		
+		Optional.ofNullable(req.getFull_name()).ifPresent(user::setFull_name);
+		Optional.ofNullable(req.getProfile_picture()).ifPresent(user::setProfile_picture);
+
 		return userRepository.save(user);
 	}
 
 
 	public User findUserById(Integer userId) throws UserException {
-		
-		Optional<User> opt=userRepository.findById(userId);
-		
-		if(opt.isPresent()) {
-			User user=opt.get();
-			
-			return user;
-		}
-		throw new UserException("user not exist with id "+userId);
+		return userRepository.findById(userId)
+				.orElseThrow(() -> new UserException("User not exist with id " + userId));
 	}
 
 
 	public User findUserProfile(String jwt) {
-		String email = jwtTokenProvider.getEmailFromToken(jwt);
-		
-		Optional<User> opt=userRepository.findByEmail(email);
-		
-		if(opt.isPresent()) {
-			return opt.get();
-		}
-		
-		throw new BadCredentialsException("recive invalid token");
+		String jwtToken = jwtTokenProvider.getEmailFromToken(jwt);
+		return userRepository.findByEmail(jwtToken)
+				.orElseThrow(() -> new BadCredentialsException("Received invalid token"));
+
 	}
 
 
