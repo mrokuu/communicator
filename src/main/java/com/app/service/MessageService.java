@@ -46,13 +46,6 @@ public class MessageService {
 				.timeStamp(LocalDateTime.now())
 				.is_read(false)
 				.build();
-		
-//		Message message=new Message();
-//		message.setChat(chat);
-//		message.setUser(user);
-//		message.setContent(req.getContent());
-//		message.setTimeStamp(LocalDateTime.now());
-//		message.setIs_read(false);
 
 		
 		
@@ -70,18 +63,13 @@ public class MessageService {
 
 
 	public List<Message> getChatsMessages(Integer chatId) throws ChatException {
-		
-		Chat chat=chatService.findChatById(chatId);
-		
-		List<Message> messages=messageRepository.findMessageByChatId(chatId);
-		
-		return messages;
+		return messageRepository.findMessageByChatId(chatId);
 	}
 
 
 	public Message findMessageById(Integer messageId) throws MessageException {
 		
-		Optional<Message> message =messageRepository.findById(messageId);
+		Optional<Message> message = messageRepository.findById(messageId);
 		
 		if(message.isPresent()) {
 			return message.get();
