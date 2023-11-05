@@ -36,7 +36,7 @@ public class ChatService {
 			return isChatExist;
 		}
 		
-		Chat chat=new Chat().builder()
+		Chat chat= Chat.builder()
 				.created_by(reqUser)
 				.is_group(false)
 				.build();
@@ -45,11 +45,7 @@ public class ChatService {
 		chat.getUsers().add(reqUser);
 		chat.getUsers().add(user2);
 
-		
-		Chat createdChat = chatRepository.save(chat);
-
-		
-		return createdChat;
+		return chatRepository.save(chat);
 	}
 
 	
@@ -109,18 +105,14 @@ public class ChatService {
 		chat.setChat_image(req.getChat_image());
 		chat.setIs_group(true);
 
-//		Chat chat = Chat.builder()
-//				.created_by(userById)
-//				.chat_name(req.getChat_name())
-//				.chat_image(req.getChat_image())
-//				.is_group(true)
-//				.users((Set<User>) userById)
-//				.admins((Set<User>) userById)
-//				.build();
 
-		for(Integer userId:req.getUserIds()) {
-			User user =userService.findUserById(userId);
-			if(user!=null)chat.getUsers().add(user);
+		for (Integer userId : req.getUserIds()) {
+			User user = userService.findUserById(userId);
+			if (user != null) {
+				chat.getUsers().add(user);
+			} else {
+				throw new UserException("User with id " + userId + " does not exist.");
+			}
 		}
 
 
@@ -162,16 +154,16 @@ public class ChatService {
 	}
 
 	public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUserId) throws UserException, ChatException {
-		Chat chat=findChatById(chatId);
-		User user=userService.findUserById(userId);
-		
-		User reqUser=userService.findUserById(reqUserId);
-		
-		if(user.getId().equals(reqUser.getId()) ) {
-			chat.getUsers().remove(reqUser);
+		Chat chat = findChatById(chatId);
+		User userToRemove = userService.findUserById(userId);
+		User reqUser = userService.findUserById(reqUserId);
+
+		if (userToRemove.getId().equals(reqUser.getId()) || chat.getAdmins().contains(reqUser)) {
+			chat.getUsers().remove(userToRemove);
+			return chatRepository.save(chat);
+		} else {
+			throw new ChatException("You do not have permission to remove this user.");
 		}
-		
-		return null;
 	}
 
 }
