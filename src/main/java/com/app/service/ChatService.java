@@ -30,25 +30,23 @@ public class ChatService {
 		User user2 = userService.findUserById(userId2);
 
 		Chat isChatExist = chatRepository.findSingleChatByUsersId(user2, reqUser);
-		
+
 
 		if(isChatExist!=null) {
 			return isChatExist;
 		}
-		
+
 		Chat chat= Chat.builder()
 				.created_by(reqUser)
 				.is_group(false)
 				.build();
-		
+
 
 		chat.getUsers().add(reqUser);
 		chat.getUsers().add(user2);
 
 		return chatRepository.save(chat);
 	}
-
-	
 
 
 
