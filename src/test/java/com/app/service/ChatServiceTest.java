@@ -8,16 +8,12 @@ import com.app.exception.UserException;
 import com.app.modal.Chat;
 import com.app.modal.User;
 import com.app.repository.ChatRepository;
-import com.app.request.GroupChatRequest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChatServiceTest {
 

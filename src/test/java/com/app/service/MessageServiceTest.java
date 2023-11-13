@@ -7,7 +7,7 @@ import com.app.modal.Chat;
 import com.app.modal.Message;
 import com.app.modal.User;
 import com.app.repository.MessageRepository;
-import com.app.request.SendMessageRequest;
+import com.app.common.request.SendMessageRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

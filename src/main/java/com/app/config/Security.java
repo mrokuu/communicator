@@ -15,52 +15,44 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
 public class Security {
-	
+
 	@Bean
 	public SecurityFilterChain securityAppConfig(HttpSecurity http) throws Exception {
-		
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().permitAll()
-            )
-//		.authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
-//		.requestMatchers(HttpMethod.POST,"/auth/signin").permitAll()
-//		.requestMatchers(HttpMethod.GET,"/").permitAll()
-//		.anyRequest().authenticated().and()
-		.addFilterBefore(new JwtValidatorFilter(), BasicAuthenticationFilter.class)
-		.csrf().disable().cors().configurationSource(new CorsConfigurationSource() {
-			
-			@Override
-			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-				
-				CorsConfiguration cfg = new CorsConfiguration();
-				
-				cfg.setAllowedOrigins(Arrays.asList(
-						
-						"http://localhost:3000", 
-						"http://localhost:4000"));
-				//cfg.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
-				cfg.setAllowedMethods(Collections.singletonList("*"));
-				cfg.setAllowCredentials(true);
-				cfg.setAllowedHeaders(Collections.singletonList("*"));
-				cfg.setExposedHeaders(Arrays.asList("Authorization"));
-				cfg.setMaxAge(3600L);
-				return cfg;
-				
-			}
-		}).and()
-		.formLogin()
-		.and()
-		.httpBasic();
+		http.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/api/**").authenticated()
+						.anyRequest().permitAll()
+				)
+				.addFilterBefore(new JwtValidatorFilter(), BasicAuthenticationFilter.class)
+				.csrf().disable()
+				.cors().configurationSource(corsConfigurationSource())
+				.and()
+				.httpBasic(); // Consider removing if not needed
 
 		return http.build();
 	}
-	
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:4000"));
+		configuration.setAllowedMethods(Collections.singletonList("*"));
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedHeaders(Collections.singletonList("*"));
+		configuration.setExposedHeaders(Arrays.asList("Authorization"));
+		configuration.setMaxAge(3600L);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

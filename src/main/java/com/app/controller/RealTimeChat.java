@@ -6,7 +6,6 @@ import com.app.service.ChatService;
 import com.app.service.MessageService;
 import com.app.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,7 +19,7 @@ import com.app.exception.UserException;
 import com.app.modal.Chat;
 import com.app.modal.Message;
 import com.app.modal.User;
-import com.app.request.SendMessageRequest;
+import com.app.common.request.SendMessageRequest;
 
 @RestController
 @AllArgsConstructor

@@ -2,11 +2,8 @@ package com.app.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.exception.ChatException;
@@ -14,7 +11,8 @@ import com.app.exception.UserException;
 import com.app.modal.Chat;
 import com.app.modal.User;
 import com.app.repository.ChatRepository;
-import com.app.request.GroupChatRequest;
+import com.app.common.request.GroupChatRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor

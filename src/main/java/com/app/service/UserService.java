@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,8 @@ import com.app.config.JwtTokenProvider;
 import com.app.exception.UserException;
 import com.app.modal.User;
 import com.app.repository.UserRepository;
-import com.app.request.UpdateUserRequest;
+import com.app.common.request.UpdateUserRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor

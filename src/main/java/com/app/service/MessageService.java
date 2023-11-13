@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.exception.ChatException;
@@ -15,7 +14,8 @@ import com.app.modal.Chat;
 import com.app.modal.Message;
 import com.app.modal.User;
 import com.app.repository.MessageRepository;
-import com.app.request.SendMessageRequest;
+import com.app.common.request.SendMessageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -29,8 +29,8 @@ public class MessageService {
 	
 
 	private ChatService chatService;
-	
-	  
+
+
 
 
 	public Message sendMessage(SendMessageRequest req) throws UserException, ChatException {

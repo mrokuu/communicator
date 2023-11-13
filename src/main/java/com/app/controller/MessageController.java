@@ -5,7 +5,6 @@ import java.util.List;
 import com.app.service.MessageService;
 import com.app.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,8 @@ import com.app.exception.MessageException;
 import com.app.exception.UserException;
 import com.app.modal.Message;
 import com.app.modal.User;
-import com.app.request.SendMessageRequest;
-import com.app.response.ApiResponse;
+import com.app.common.request.SendMessageRequest;
+import com.app.common.response.ApiResponse;
 
 @RestController
 @RequestMapping("/api/messages")

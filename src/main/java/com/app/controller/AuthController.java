@@ -20,8 +20,8 @@ import com.app.config.JwtTokenProvider;
 import com.app.exception.UserException;
 import com.app.modal.User;
 import com.app.repository.UserRepository;
-import com.app.request.LoginRequest;
-import com.app.response.AuthResponse;
+import com.app.common.request.LoginRequest;
+import com.app.common.response.AuthResponse;
 import com.app.service.CustomUserDetailsService;
 
 import jakarta.validation.Valid;
@@ -48,13 +48,11 @@ public class AuthController {
 	        
 	        Optional<User> isEmailExist=userRepository.findByEmail(email);
 
-	        // Check if user with the given email already exists
 	        if (isEmailExist.isPresent()) {
 
 	            throw new UserException("Email Is Already Used With Another Account");
 	        }
 
-	        // Create new user
 			User createdUser= new User();
 			createdUser.setEmail(email);
 			createdUser.setFull_name(full_name);
@@ -64,7 +62,6 @@ public class AuthController {
 	        
 	        userRepository.save(createdUser);
 
-	        // Authenticate user and generate JWT token
 	        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
 	        SecurityContextHolder.getContext().setAuthentication(authentication);
 	        

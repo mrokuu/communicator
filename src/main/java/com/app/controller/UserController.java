@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.app.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,7 @@ import com.app.controller.mapper.UserMapper;
 import com.app.dto.UserDto;
 import com.app.exception.UserException;
 import com.app.modal.User;
-import com.app.request.UpdateUserRequest;
+import com.app.common.request.UpdateUserRequest;
 
 @RestController
 @RequestMapping("/api/users")

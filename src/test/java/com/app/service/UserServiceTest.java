@@ -4,7 +4,7 @@ import com.app.config.JwtTokenProvider;
 import com.app.exception.UserException;
 import com.app.modal.User;
 import com.app.repository.UserRepository;
-import com.app.request.UpdateUserRequest;
+import com.app.common.request.UpdateUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

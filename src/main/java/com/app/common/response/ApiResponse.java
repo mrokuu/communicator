@@ -1,4 +1,4 @@
-package com.app.response;
+package com.app.common.response;
 
 import lombok.*;
 
@@ -7,11 +7,11 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthResponse {
+public class ApiResponse {
 	
-	private String jwt;
-	
+	private String message;
 	private boolean status;
 	
+
 
 }

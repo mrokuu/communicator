@@ -2,10 +2,10 @@ package com.app.controller;
 
 import java.util.List;
 
+import com.app.repository.ChatRepository;
 import com.app.service.ChatService;
 import com.app.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,16 +24,16 @@ import com.app.exception.ChatException;
 import com.app.exception.UserException;
 import com.app.modal.Chat;
 import com.app.modal.User;
-import com.app.request.GroupChatRequest;
-import com.app.request.RenameGroupRequest;
-import com.app.request.SingleChatRequest;
+import com.app.common.request.GroupChatRequest;
+import com.app.common.request.RenameGroupRequest;
+import com.app.common.request.SingleChatRequest;
 
 @RestController
 @RequestMapping("/api/chats")
 @AllArgsConstructor
 public class ChatController {
 
-//	private ChatRepository chatRepo;
+	private ChatRepository chatRepository;
 	
 	private ChatService chatService;
 	

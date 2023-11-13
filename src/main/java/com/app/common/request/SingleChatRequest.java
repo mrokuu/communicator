@@ -1,4 +1,4 @@
-package com.app.request;
+package com.app.common.request;
 
 import lombok.*;
 
