@@ -48,15 +48,10 @@ public class ChatService {
 
 
 
-	public Chat findChatById(Integer chatId) throws ChatException {
-		
-		Optional<Chat> chat =chatRepository.findById(chatId);
-		
-		if(chat.isPresent()) {
-			return chat.get();
-		}
-		throw new ChatException("Chat not exist with id "+chatId);
-	}
+public Chat findChatById(Integer chatId) throws ChatException {
+	return chatRepository.findById(chatId)
+			.orElseThrow(() -> new ChatException("Chat not exist with id " + chatId));
+}
 
 
 	public List<Chat> findAllChatByUserId(Integer userId) throws UserException {

@@ -52,7 +52,6 @@ public class MessageService {
 		return messageRepository.save(message);
 	}
 
-
 	public void deleteMessage(Integer messageId) throws MessageException {
 		
 		Message message=findMessageById(messageId);
@@ -67,14 +66,10 @@ public class MessageService {
 	}
 
 
-	public Message findMessageById(Integer messageId) throws MessageException {
-		
-		Optional<Message> message = messageRepository.findById(messageId);
-		
-		if(message.isPresent()) {
-			return message.get();
-		}
-		throw new MessageException("message not exist with id "+messageId);
-	}
+
+public Message findMessageById(Integer messageId) throws MessageException {
+	return messageRepository.findById(messageId)
+			.orElseThrow(() -> new MessageException("Message not exist with id " + messageId));
+}
 
 }
