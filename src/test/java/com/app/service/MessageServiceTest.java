@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,5 +99,103 @@ class MessageServiceTest {
 
         assertThrows(MessageException.class, () -> messageService.findMessageById(messageId));
     }
+
+    @Test
+    void testSendMessage() throws UserException, ChatException {
+        // Arrange
+        SendMessageRequest request = new SendMessageRequest(/* parameters */);
+        User mockUser = new User(/* parameters */);
+        Chat mockChat = new Chat(/* parameters */);
+        Message mockMessage = new Message(/* parameters */);
+
+        when(userService.findUserById(anyInt())).thenReturn(mockUser);
+        when(chatService.findChatById(anyInt())).thenReturn(mockChat);
+        when(messageRepository.save(any(Message.class))).thenReturn(mockMessage);
+
+        // Act
+        Message result = messageService.sendMessage(request);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockMessage, result);
+    }
+
+
+
+    @Test
+    void testGetChatsMessages() throws ChatException {
+        // Arrange
+        Integer chatId = 1;
+        List<Message> mockMessages = Arrays.asList(new Message(/* parameters */));
+
+        when(messageRepository.findMessageByChatId(chatId)).thenReturn(mockMessages);
+
+        // Act
+        List<Message> result = messageService.getChatsMessages(chatId);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        // Additional assertions as needed
+    }
+
+    @Test
+    void testFindMessageById() throws MessageException {
+        // Arrange
+        Integer messageId = 1;
+        Message mockMessage = new Message(/* parameters */);
+
+        when(messageRepository.findById(messageId)).thenReturn(Optional.of(mockMessage));
+
+        // Act
+        Message result = messageService.findMessageById(messageId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockMessage, result);
+    }
+
+    // ... [Previous Test Code] ...
+
+
+
+
+    @Test
+    void testDeleteMessageNotFound() {
+        // Arrange
+        Integer messageId = 1;
+
+        when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(MessageException.class, () -> messageService.deleteMessage(messageId));
+    }
+
+    @Test
+    void testGetChatsMessagesEmptyChat() throws ChatException {
+        // Arrange
+        Integer chatId = 1;
+
+        when(messageRepository.findMessageByChatId(chatId)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Message> result = messageService.getChatsMessages(chatId);
+
+        // Assert
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testFindMessageByIdNotFound() {
+        // Arrange
+        Integer messageId = 1;
+
+        when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(MessageException.class, () -> messageService.findMessageById(messageId));
+    }
+
+
 
 }

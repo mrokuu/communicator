@@ -2,6 +2,7 @@ package com.app.service;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.app.common.request.GroupChatRequest;
 import org.junit.jupiter.api.Test;
 import com.app.exception.ChatException;
 import com.app.exception.UserException;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 class ChatServiceTest {
@@ -77,5 +80,55 @@ class ChatServiceTest {
 
         assertThrows(ChatException.class, () -> chatService.findChatById(chatId));
     }
+
+
+
+
+    @Test
+    public void testCreateChat_ChatAlreadyExists() throws UserException {
+        User user1 = new User(/* ... */);
+        User user2 = new User(/* ... */);
+        Chat existingChat = new Chat(/* ... */);
+
+        when(userService.findUserById(1)).thenReturn(user1);
+        when(userService.findUserById(2)).thenReturn(user2);
+        when(chatRepository.findSingleChatByUsersId(user1, user2)).thenReturn(existingChat);
+
+        Chat result = chatService.createChat(1, 2, false);
+
+        assertEquals(existingChat, result);
+    }
+
+    @Test
+    void testFindChatById_Success() throws ChatException {
+        Integer chatId = 1;
+        Chat expectedChat = new Chat(); // Initialize with necessary fields
+        when(chatRepository.findById(chatId)).thenReturn(Optional.of(expectedChat));
+
+        Chat resultChat = chatService.findChatById(chatId);
+
+        assertNotNull(resultChat);
+        assertEquals(expectedChat, resultChat);
+    }
+
+    @Test
+    void testAddUserToGroup_Success() throws UserException, ChatException {
+        Integer userId = 4;
+        Integer chatId = 5;
+        User user = new User(); // Initialize with necessary fields
+        Chat chat = new Chat(); // Initialize with necessary fields
+
+        when(userService.findUserById(userId)).thenReturn(user);
+        when(chatService.findChatById(chatId)).thenReturn(chat);
+        when(chatRepository.save(any(Chat.class))).thenReturn(new Chat());
+
+        Chat resultChat = chatService.addUserToGroup(userId, chatId);
+
+        assertNotNull(resultChat);
+        // Additional assertions to check properties of resultChat
+    }
+
+
+
 
 }

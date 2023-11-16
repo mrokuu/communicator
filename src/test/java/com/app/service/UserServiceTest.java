@@ -124,6 +124,51 @@ class UserServiceTest {
         assertEquals(2, foundUsers.size());
     }
 
+    @Test
+    public void testFindUserById_WithValidId() throws UserException {
+        Integer userId = 1;
+        User expectedUser = new User(); // assume this is a populated user object
+        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
+
+        User result = userService.findUserById(userId);
+
+        assertEquals(expectedUser, result);
+    }
+
+    @Test
+    public void testUpdateUser_WithValidData() throws UserException {
+        Integer userId = 1;
+        UpdateUserRequest req = new UpdateUserRequest();
+        req.setFull_name("John Doe");
+        req.setProfile_picture("profile_pic.jpg");
+
+        User existingUser = new User();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        User updatedUser = userService.updateUser(userId, req);
+
+        assertEquals("John Doe", updatedUser.getFull_name());
+        assertEquals("profile_pic.jpg", updatedUser.getProfile_picture());
+    }
+
+    @Test
+    public void testFindUserProfile_WithValidToken() {
+        String jwt = "valid.jwt.token";
+        String email = "test@example.com";
+        User expectedUser = new User();
+        expectedUser.setEmail(email);
+
+        when(jwtTokenProvider.getEmailFromToken(jwt)).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+
+        User result = userService.findUserProfile(jwt);
+
+        assertEquals(expectedUser, result);
+    }
+
+
+    
 
 
 
