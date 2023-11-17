@@ -15,7 +15,7 @@ private String content;
 
 	private Integer id;
 	private LocalDateTime timeStamp;
-	private Boolean is_read;
+	private Boolean isRead;
 	private UserDto user;
 	private ChatDto chat;
 	

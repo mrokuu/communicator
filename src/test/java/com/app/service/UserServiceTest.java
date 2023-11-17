@@ -57,7 +57,7 @@ class UserServiceTest {
 
         User updatedUser = userService.updateUser(userId, req);
 
-        assertEquals("New Name", updatedUser.getFull_name());
+        assertEquals("New Name", updatedUser.getFullName());
         assertEquals("New Picture", updatedUser.getProfile_picture());
     }
 
@@ -125,7 +125,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testFindUserById_WithValidId() throws UserException {
+    public void testFindUserByIdWithValidId() throws UserException {
         Integer userId = 1;
         User expectedUser = new User(); // assume this is a populated user object
         when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
@@ -136,7 +136,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUser_WithValidData() throws UserException {
+    public void testUpdateUserWithValidData() throws UserException {
         Integer userId = 1;
         UpdateUserRequest req = new UpdateUserRequest();
         req.setFull_name("John Doe");
@@ -148,12 +148,12 @@ class UserServiceTest {
 
         User updatedUser = userService.updateUser(userId, req);
 
-        assertEquals("John Doe", updatedUser.getFull_name());
+        assertEquals("John Doe", updatedUser.getFullName());
         assertEquals("profile_pic.jpg", updatedUser.getProfile_picture());
     }
 
     @Test
-    public void testFindUserProfile_WithValidToken() {
+    public void testFindUserProfileWithValidToken() {
         String jwt = "valid.jwt.token";
         String email = "test@example.com";
         User expectedUser = new User();

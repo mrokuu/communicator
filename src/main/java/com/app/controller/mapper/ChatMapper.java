@@ -22,10 +22,10 @@ public class ChatMapper {
 		
 		ChatDto chatDto=new ChatDto();
 		chatDto.setId(chat.getId());
-		chatDto.setChat_image(chat.getChat_image());
-		chatDto.setChat_name(chat.getChat_name());
-		chatDto.setCreated_by(userDto);
-		chatDto.setIs_group(chat.getIs_group());
+		chatDto.setChatImage(chat.getChatImage());
+		chatDto.setChatName(chat.getChatName());
+		chatDto.setCreatedBy(userDto);
+		chatDto.setIsGroup(chat.getIs_group());
 		chatDto.setMessages(messageDtos);
 		chatDto.setUsers(userDtos);
 		chatDto.setAdmins(admins);

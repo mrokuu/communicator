@@ -44,7 +44,7 @@ public class MessageService {
 				.user(userById)
 				.content(req.getContent())
 				.timeStamp(LocalDateTime.now())
-				.is_read(false)
+				.isRead(false)
 				.build();
 
 		

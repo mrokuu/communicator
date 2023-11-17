@@ -20,7 +20,7 @@ public class MessageMapper {
 		messageDto.setId(message.getId());
 		messageDto.setChat(chatDto);
 		messageDto.setContent(message.getContent());
-		messageDto.setIs_read(message.getIs_read());
+		messageDto.setIsRead(message.getIsRead());
 		messageDto.setTimeStamp(message.getTimeStamp());
 		messageDto.setUser(userDto);
 //		messageDto.set

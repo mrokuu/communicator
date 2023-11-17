@@ -24,7 +24,7 @@ public class Message {
 	private String content;
 	
 	private LocalDateTime timeStamp;
-	private Boolean is_read;
+	private Boolean isRead;
 	
 	@ManyToOne
 	private User user;

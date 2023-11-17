@@ -16,20 +16,20 @@ import lombok.*;
 public class ChatDto {
 
 	private Integer id;
-	private String chat_name;
-	private String chat_image;
+	private String chatName;
+	private String chatImage;
 	
 	@Column(columnDefinition = "boolean default false")
-	private Boolean is_group;
+	private Boolean isGroup;
 	
 	private Set<UserDto> admins= new HashSet<>();
 	
-	private UserDto created_by;
+	private UserDto createdBy;
 
 	private Set<UserDto> users = new HashSet<>();
 	
 	private List<MessageDto> messages=new ArrayList<>();
 
 
-	
+
 }

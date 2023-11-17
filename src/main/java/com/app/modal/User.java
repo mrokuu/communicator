@@ -24,7 +24,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	private String full_name;
+	private String fullName;
 	private String email;
 	private String profile_picture;
 	private String password;
@@ -35,13 +35,13 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", full_name=" + full_name + ", email=" + email + ", notifications=" + notifications
+		return "User [id=" + id + ", full_name=" + fullName + ", email=" + email + ", notifications=" + notifications
 				+ "]";
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, full_name, id, password, profile_picture);
+		return Objects.hash(email, fullName, id, password, profile_picture);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -52,7 +52,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(full_name, other.full_name)
+		return Objects.equals(email, other.email) && Objects.equals(fullName, other.fullName)
 				&& Objects.equals(id, other.id) && Objects.equals(password, other.password)
 				&& Objects.equals(profile_picture, other.profile_picture);
 	}

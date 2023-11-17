@@ -32,7 +32,7 @@ public class UserService  {
 	public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
 		User user = findUserById(userId);
 
-		Optional.ofNullable(req.getFull_name()).ifPresent(user::setFull_name);
+		Optional.ofNullable(req.getFull_name()).ifPresent(user::setFullName);
 		Optional.ofNullable(req.getProfile_picture()).ifPresent(user::setProfile_picture);
 
 		return userRepository.save(user);

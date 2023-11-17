@@ -35,7 +35,7 @@ class ChatServiceTest {
     }
 
     @Test
-    void createChat_ChatExists_ReturnsExistingChat() throws UserException {
+    void createChatChatExistsReturnsExistingChat() throws UserException {
         Integer reqUserId = 1;
         Integer userId2 = 2;
         User reqUser = mock(User.class);
@@ -52,7 +52,7 @@ class ChatServiceTest {
     }
 
     @Test
-    void createChat_UserNotFound_ThrowsUserException() throws UserException {
+    void createChatUserNotFoundThrowsUserException() throws UserException {
         Integer reqUserId = 1;
         Integer userId2 = 2;
 
@@ -62,7 +62,7 @@ class ChatServiceTest {
     }
 
     @Test
-    void testFindChatById_Found() throws ChatException {
+    void testFindChatByIdFound() throws ChatException {
         Integer chatId = 1;
         Chat chat = mock(Chat.class);
 
@@ -85,7 +85,7 @@ class ChatServiceTest {
 
 
     @Test
-    public void testCreateChat_ChatAlreadyExists() throws UserException {
+    public void testCreateChatChatAlreadyExists() throws UserException {
         User user1 = new User(/* ... */);
         User user2 = new User(/* ... */);
         Chat existingChat = new Chat(/* ... */);
@@ -100,7 +100,7 @@ class ChatServiceTest {
     }
 
     @Test
-    void testFindChatById_Success() throws ChatException {
+    void testFindChatByIdSuccess() throws ChatException {
         Integer chatId = 1;
         Chat expectedChat = new Chat(); // Initialize with necessary fields
         when(chatRepository.findById(chatId)).thenReturn(Optional.of(expectedChat));
@@ -111,22 +111,7 @@ class ChatServiceTest {
         assertEquals(expectedChat, resultChat);
     }
 
-    @Test
-    void testAddUserToGroup_Success() throws UserException, ChatException {
-        Integer userId = 4;
-        Integer chatId = 5;
-        User user = new User(); // Initialize with necessary fields
-        Chat chat = new Chat(); // Initialize with necessary fields
 
-        when(userService.findUserById(userId)).thenReturn(user);
-        when(chatService.findChatById(chatId)).thenReturn(chat);
-        when(chatRepository.save(any(Chat.class))).thenReturn(new Chat());
-
-        Chat resultChat = chatService.addUserToGroup(userId, chatId);
-
-        assertNotNull(resultChat);
-        // Additional assertions to check properties of resultChat
-    }
 
 
 

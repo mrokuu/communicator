@@ -11,7 +11,7 @@ import java.util.Objects;
 public class UserDto {
 	
 	private Integer id;
-	private String full_name;
+	private String fullName;
 	private String email;
 	private String profile_picture;
 	
@@ -19,7 +19,7 @@ public class UserDto {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, full_name, id, profile_picture);
+		return Objects.hash(email, fullName, id, profile_picture);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class UserDto {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDto other = (UserDto) obj;
-		return Objects.equals(email, other.email) && Objects.equals(full_name, other.full_name)
+		return Objects.equals(email, other.email) && Objects.equals(fullName, other.fullName)
 				&& Objects.equals(id, other.id) && Objects.equals(profile_picture, other.profile_picture);
 	}
 	

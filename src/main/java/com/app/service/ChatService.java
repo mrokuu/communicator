@@ -92,8 +92,8 @@ public Chat findChatById(Integer chatId) throws ChatException {
 		chat.setCreated_by(userById);
 		chat.getUsers().add(userById);
 		chat.getAdmins().add(userById);
-		chat.setChat_name(req.getChat_name());
-		chat.setChat_image(req.getChat_image());
+		chat.setChatName(req.getChat_name());
+		chat.setChatImage(req.getChat_image());
 		chat.setIs_group(true);
 
 
@@ -139,7 +139,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 		
 		
 		if(chat.getUsers().contains(user))
-		chat.setChat_name(groupName);
+		chat.setChatName(groupName);
 		
 		return chatRepository.save(chat);
 	}

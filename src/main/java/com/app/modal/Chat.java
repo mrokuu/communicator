@@ -28,8 +28,8 @@ public class Chat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	private String chat_name;
-	private String chat_image;
+	private String chatName;
+	private String chatImage;
 	
 	@ManyToMany
 	private Set<User> admins=new HashSet<>();
@@ -53,7 +53,7 @@ public class Chat {
 
 	@Override
 	public String toString() {
-		return "Chat [id=" + id + ", chat_name=" + chat_name + ", chat_image=" + chat_image + ", admins=" + admins
+		return "Chat [id=" + id + ", chat_name=" + chatName + ", chat_image=" + chatImage + ", admins=" + admins
 				+ ", is_group=" + is_group + ", created_by=" + created_by + ", users=" + users + ", messages="
 				+ messages + "]";
 	}

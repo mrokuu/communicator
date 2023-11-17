@@ -44,7 +44,7 @@ public class AuthController {
 		
 		  	String email = user.getEmail();
 	        String password = user.getPassword();
-	        String full_name=user.getFull_name();
+	        String full_name=user.getFullName();
 	        
 	        Optional<User> isEmailExist=userRepository.findByEmail(email);
 
@@ -55,7 +55,7 @@ public class AuthController {
 
 			User createdUser= new User();
 			createdUser.setEmail(email);
-			createdUser.setFull_name(full_name);
+			createdUser.setFullName(full_name);
 	        createdUser.setPassword(passwordEncoder.encode(password));
 	        
 	        

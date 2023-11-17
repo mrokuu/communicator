@@ -61,7 +61,7 @@ class MessageServiceTest {
         assertEquals(user, sentMessage.getUser());
         assertEquals(chat, sentMessage.getChat());
         assertNotNull(sentMessage.getTimeStamp());
-        assertFalse(sentMessage.getIs_read());
+        assertFalse(sentMessage.getIsRead());
     }
 
     @Test
@@ -80,7 +80,7 @@ class MessageServiceTest {
 
 
     @Test
-    void findMessageByIdTest_ExistingMessage() throws MessageException {
+    void findMessageByIdTestExistingMessage() throws MessageException {
         Integer messageId = 1;
         Message message = new Message(); // Assuming Message has an empty constructor
 
@@ -92,7 +92,7 @@ class MessageServiceTest {
     }
 
     @Test
-    void findMessageByIdTest_MessageNotFound() {
+    void findMessageByIdTestMessageNotFound() {
         Integer messageId = 1;
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
