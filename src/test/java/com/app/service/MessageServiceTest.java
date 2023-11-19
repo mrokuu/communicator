@@ -44,8 +44,8 @@ class MessageServiceTest {
     @Test
     void sendMessageTest() throws UserException, ChatException {
         SendMessageRequest req = new SendMessageRequest();
-        req.setUserId(1);
-        req.setChatId(1);
+        req.setUserId(1L);
+        req.setChatId(1L);
         req.setContent("Test Message");
 
         User user = new User(); // Assuming User has an empty constructor
@@ -66,7 +66,7 @@ class MessageServiceTest {
 
     @Test
     void deleteMessageTest() throws MessageException {
-        Integer messageId = 1;
+        Long messageId = 1L;
         Message message = new Message(); // Assuming Message has an empty constructor
         message.setId(messageId);
 
@@ -81,7 +81,7 @@ class MessageServiceTest {
 
     @Test
     void findMessageByIdTestExistingMessage() throws MessageException {
-        Integer messageId = 1;
+        Long messageId = 1L;
         Message message = new Message(); // Assuming Message has an empty constructor
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.of(message));
@@ -93,7 +93,7 @@ class MessageServiceTest {
 
     @Test
     void findMessageByIdTestMessageNotFound() {
-        Integer messageId = 1;
+        Long messageId = 1L;
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
 
@@ -108,8 +108,8 @@ class MessageServiceTest {
         Chat mockChat = new Chat(/* parameters */);
         Message mockMessage = new Message(/* parameters */);
 
-        when(userService.findUserById(anyInt())).thenReturn(mockUser);
-        when(chatService.findChatById(anyInt())).thenReturn(mockChat);
+        when(userService.findUserById(anyLong())).thenReturn(mockUser);
+        when(chatService.findChatById(anyLong())).thenReturn(mockChat);
         when(messageRepository.save(any(Message.class))).thenReturn(mockMessage);
 
         // Act
@@ -125,7 +125,7 @@ class MessageServiceTest {
     @Test
     void testGetChatsMessages() throws ChatException {
         // Arrange
-        Integer chatId = 1;
+        Long chatId = 1L;
         List<Message> mockMessages = Arrays.asList(new Message(/* parameters */));
 
         when(messageRepository.findMessageByChatId(chatId)).thenReturn(mockMessages);
@@ -142,7 +142,7 @@ class MessageServiceTest {
     @Test
     void testFindMessageById() throws MessageException {
         // Arrange
-        Integer messageId = 1;
+        Long messageId = 1L;
         Message mockMessage = new Message(/* parameters */);
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.of(mockMessage));
@@ -163,7 +163,7 @@ class MessageServiceTest {
     @Test
     void testDeleteMessageNotFound() {
         // Arrange
-        Integer messageId = 1;
+        Long messageId = 1L;
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
 
@@ -174,7 +174,7 @@ class MessageServiceTest {
     @Test
     void testGetChatsMessagesEmptyChat() throws ChatException {
         // Arrange
-        Integer chatId = 1;
+        Long chatId = 1L;
 
         when(messageRepository.findMessageByChatId(chatId)).thenReturn(Collections.emptyList());
 
@@ -188,7 +188,7 @@ class MessageServiceTest {
     @Test
     void testFindMessageByIdNotFound() {
         // Arrange
-        Integer messageId = 1;
+        Long messageId = 1L;
 
         when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
 

@@ -13,7 +13,7 @@ public class MessageDto {
 private String content;
 	
 
-	private Integer id;
+	private Long id;
 	private LocalDateTime timeStamp;
 	private Boolean isRead;
 	private UserDto user;

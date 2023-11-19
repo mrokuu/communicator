@@ -27,7 +27,7 @@ import lombok.*;
 public class Chat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	private String chatName;
 	private String chatImage;
 	

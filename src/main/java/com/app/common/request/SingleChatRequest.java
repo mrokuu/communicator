@@ -10,7 +10,7 @@ import lombok.*;
 public class SingleChatRequest {
 	
 	
-	private Integer userId;
+	private Long userId;
 
 
 

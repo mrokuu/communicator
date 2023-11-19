@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class GroupChatRequest {
 	
-	private List<Integer> userIds;
+	private List<Long> userIds;
 	private String chat_name;
 	private String chat_image;
 	

@@ -52,7 +52,7 @@ public class MessageService {
 		return messageRepository.save(message);
 	}
 
-	public void deleteMessage(Integer messageId) throws MessageException {
+	public void deleteMessage(Long messageId) throws MessageException {
 		
 		Message message=findMessageById(messageId);
 
@@ -61,13 +61,13 @@ public class MessageService {
 	}
 
 
-	public List<Message> getChatsMessages(Integer chatId) throws ChatException {
+	public List<Message> getChatsMessages(Long chatId) throws ChatException {
 		return messageRepository.findMessageByChatId(chatId);
 	}
 
 
 
-public Message findMessageById(Integer messageId) throws MessageException {
+public Message findMessageById(Long messageId) throws MessageException {
 	return messageRepository.findById(messageId)
 			.orElseThrow(() -> new MessageException("Message not exist with id " + messageId));
 }

@@ -44,7 +44,7 @@ class UserServiceTest {
 
     @Test
     public void testUpdateUser() throws UserException {
-        Integer userId = 1;
+        Long userId = 1L;
         UpdateUserRequest req = new UpdateUserRequest();
         req.setFull_name("New Name");
         req.setProfile_picture("New Picture");
@@ -63,7 +63,7 @@ class UserServiceTest {
 
     @Test
     public void testFindUserById() throws UserException {
-        Integer userId = 1;
+        Long userId = 1L;
         User user = new User();
         user.setId(userId);
 
@@ -76,7 +76,7 @@ class UserServiceTest {
 
     @Test
     public void testFindUserByIdNotFound() {
-        Integer userId = 1;
+        Long userId = 1L;
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
@@ -126,7 +126,7 @@ class UserServiceTest {
 
     @Test
     public void testFindUserByIdWithValidId() throws UserException {
-        Integer userId = 1;
+        Long userId = 1L;
         User expectedUser = new User(); // assume this is a populated user object
         when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
 
@@ -137,7 +137,7 @@ class UserServiceTest {
 
     @Test
     public void testUpdateUserWithValidData() throws UserException {
-        Integer userId = 1;
+        Long userId = 1L;
         UpdateUserRequest req = new UpdateUserRequest();
         req.setFull_name("John Doe");
         req.setProfile_picture("profile_pic.jpg");

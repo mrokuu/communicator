@@ -31,7 +31,7 @@ public class UserController {
 	
 	
 	@PutMapping("/update/{userId}")
-	public ResponseEntity<UserDto> updateUserHandler(@RequestBody UpdateUserRequest req, @PathVariable Integer userId) throws UserException{
+	public ResponseEntity<UserDto> updateUserHandler(@RequestBody UpdateUserRequest req, @PathVariable Long userId) throws UserException{
 		User updatedUser=userService.updateUser(userId, req);
 		UserDto userDto= UserMapper.toUserDTO(updatedUser);
 

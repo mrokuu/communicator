@@ -10,7 +10,7 @@ import java.util.Objects;
 @Setter
 public class UserDto {
 	
-	private Integer id;
+	private Long id;
 	private String fullName;
 	private String email;
 	private String profile_picture;

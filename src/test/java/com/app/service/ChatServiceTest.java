@@ -36,8 +36,8 @@ class ChatServiceTest {
 
     @Test
     void createChatChatExistsReturnsExistingChat() throws UserException {
-        Integer reqUserId = 1;
-        Integer userId2 = 2;
+        Long reqUserId = 1L;
+        Long userId2 = 2L;
         User reqUser = mock(User.class);
         User user2 = mock(User.class);
         Chat existingChat = new Chat();
@@ -53,8 +53,8 @@ class ChatServiceTest {
 
     @Test
     void createChatUserNotFoundThrowsUserException() throws UserException {
-        Integer reqUserId = 1;
-        Integer userId2 = 2;
+        Long reqUserId = 1L;
+        Long userId2 = 2L;
 
         when(userService.findUserById(reqUserId)).thenThrow(new UserException("User not found"));
 
@@ -63,7 +63,7 @@ class ChatServiceTest {
 
     @Test
     void testFindChatByIdFound() throws ChatException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         Chat chat = mock(Chat.class);
 
         when(chatRepository.findById(chatId)).thenReturn(Optional.of(chat));
@@ -75,7 +75,7 @@ class ChatServiceTest {
 
     @Test
     void testFindChatById_NotFound() {
-        Integer chatId = 1;
+        Long chatId = 1L;
         when(chatRepository.findById(chatId)).thenReturn(Optional.empty());
 
         assertThrows(ChatException.class, () -> chatService.findChatById(chatId));
@@ -90,18 +90,18 @@ class ChatServiceTest {
         User user2 = new User(/* ... */);
         Chat existingChat = new Chat(/* ... */);
 
-        when(userService.findUserById(1)).thenReturn(user1);
-        when(userService.findUserById(2)).thenReturn(user2);
+        when(userService.findUserById(1L)).thenReturn(user1);
+        when(userService.findUserById(2L)).thenReturn(user2);
         when(chatRepository.findSingleChatByUsersId(user1, user2)).thenReturn(existingChat);
 
-        Chat result = chatService.createChat(1, 2, false);
+        Chat result = chatService.createChat(1L, 2L, false);
 
         assertEquals(existingChat, result);
     }
 
     @Test
     void testFindChatByIdSuccess() throws ChatException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         Chat expectedChat = new Chat(); // Initialize with necessary fields
         when(chatRepository.findById(chatId)).thenReturn(Optional.of(expectedChat));
 

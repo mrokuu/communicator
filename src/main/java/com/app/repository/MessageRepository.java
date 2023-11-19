@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.app.modal.Message;
 
-public interface MessageRepository extends JpaRepository<Message, Integer>{
+public interface MessageRepository extends JpaRepository<Message, Long>{
 	
 	@Query("select m from Message m join m.chat c where c.id=:chatId")
-	public List<Message> findMessageByChatId(@Param("chatId") Integer chatId);
+	public List<Message> findMessageByChatId(@Param("chatId") Long chatId);
 
 }

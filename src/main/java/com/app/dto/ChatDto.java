@@ -15,7 +15,7 @@ import lombok.*;
 @Setter
 public class ChatDto {
 
-	private Integer id;
+	private Long id;
 	private String chatName;
 	private String chatImage;
 	

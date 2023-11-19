@@ -29,7 +29,7 @@ public class UserService  {
 	private JwtTokenProvider jwtTokenProvider;
 
 
-	public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
+	public User updateUser(Long userId, UpdateUserRequest req) throws UserException {
 		User user = findUserById(userId);
 
 		Optional.ofNullable(req.getFull_name()).ifPresent(user::setFullName);
@@ -39,7 +39,7 @@ public class UserService  {
 	}
 
 
-	public User findUserById(Integer userId) throws UserException {
+	public User findUserById(Long userId) throws UserException {
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new UserException("User not exist with id " + userId));
 	}

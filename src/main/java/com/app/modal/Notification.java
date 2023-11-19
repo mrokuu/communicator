@@ -22,7 +22,7 @@ public class Notification {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	private String message;
 	private Boolean isSeen;
 	private LocalDateTime timestamp;

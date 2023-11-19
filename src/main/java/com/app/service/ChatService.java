@@ -23,7 +23,7 @@ public class ChatService {
 	private ChatRepository chatRepository;
 
 
-	public Chat createChat(Integer reqUserId, Integer userId2, boolean isGroup) throws UserException {
+	public Chat createChat(Long reqUserId, Long userId2, boolean isGroup) throws UserException {
 		User reqUser=userService.findUserById(reqUserId);
 		User user2 = userService.findUserById(userId2);
 
@@ -48,13 +48,13 @@ public class ChatService {
 
 
 
-public Chat findChatById(Integer chatId) throws ChatException {
+public Chat findChatById(Long chatId) throws ChatException {
 	return chatRepository.findById(chatId)
 			.orElseThrow(() -> new ChatException("Chat not exist with id " + chatId));
 }
 
 
-	public List<Chat> findAllChatByUserId(Integer userId) throws UserException {
+	public List<Chat> findAllChatByUserId(Long userId) throws UserException {
 		
 
 		User user=userService.findUserById(userId);
@@ -66,7 +66,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 	}
 	
 
-	public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
+	public Chat deleteChat(Long chatId, Long userId) throws ChatException, UserException {
 
 		User user=userService.findUserById(userId);
 		Chat chat=findChatById(chatId);
@@ -84,7 +84,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 
 
 
-	public Chat createGroup(GroupChatRequest req,Integer reqUserId) throws UserException {
+	public Chat createGroup(GroupChatRequest req,Long reqUserId) throws UserException {
 		
 		User userById=userService.findUserById(reqUserId);
 
@@ -97,7 +97,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 		chat.setIs_group(true);
 
 
-		for (Integer userId : req.getUserIds()) {
+		for (Long userId : req.getUserIds()) {
 			User user = userService.findUserById(userId);
 			if (user != null) {
 				chat.getUsers().add(user);
@@ -115,7 +115,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 
 
 
-	public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
+	public Chat addUserToGroup(Long userId, Long chatId) throws UserException, ChatException {
 		
 		Chat chat =findChatById(chatId);
 		User user=userService.findUserById(userId);
@@ -132,7 +132,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 
 
 
-	public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws ChatException, UserException {
+	public Chat renameGroup(Long chatId, String groupName, Long reqUserId) throws ChatException, UserException {
 		
 		Chat chat=findChatById(chatId);
 		User user=userService.findUserById(reqUserId);
@@ -144,7 +144,7 @@ public Chat findChatById(Integer chatId) throws ChatException {
 		return chatRepository.save(chat);
 	}
 
-	public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUserId) throws UserException, ChatException {
+	public Chat removeFromGroup(Long chatId, Long userId, Long reqUserId) throws UserException, ChatException {
 		Chat chat = findChatById(chatId);
 		User userToRemove = userService.findUserById(userId);
 		User reqUser = userService.findUserById(reqUserId);

@@ -9,8 +9,8 @@ import lombok.*;
 @Setter
 public class SendMessageRequest {
 	
-	private Integer chatId;
-	private Integer userId;
+	private Long chatId;
+	private Long userId;
 	private String content;
 	
 

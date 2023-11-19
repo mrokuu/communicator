@@ -51,7 +51,7 @@ public class MessageController {
 	}
 	
 	@GetMapping("/chat/{chatId}")
-	public ResponseEntity<List<MessageDto>> getChatsMessageHandler(@PathVariable Integer chatId) throws ChatException{
+	public ResponseEntity<List<MessageDto>> getChatsMessageHandler(@PathVariable Long chatId) throws ChatException{
 		
 		List<Message> messages=messageService.getChatsMessages(chatId);
 		
@@ -62,7 +62,7 @@ public class MessageController {
 	}
 	
 	@DeleteMapping("/{messageId}")
-	public ResponseEntity<ApiResponse> deleteMessageHandler(@PathVariable Integer messageId) throws MessageException{
+	public ResponseEntity<ApiResponse> deleteMessageHandler(@PathVariable Long messageId) throws MessageException{
 		
 		messageService.deleteMessage(messageId);
 		
