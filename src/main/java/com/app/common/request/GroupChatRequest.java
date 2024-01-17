@@ -12,8 +12,8 @@ import java.util.List;
 public class GroupChatRequest {
 	
 	private List<Long> userIds;
-	private String chat_name;
-	private String chat_image;
+	private String chatName;
+	private String chatImage;
 	
 
 }

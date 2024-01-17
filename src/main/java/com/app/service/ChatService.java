@@ -92,8 +92,8 @@ public Chat findChatById(Long chatId) throws ChatException {
 		chat.setCreated_by(userById);
 		chat.getUsers().add(userById);
 		chat.getAdmins().add(userById);
-		chat.setChatName(req.getChat_name());
-		chat.setChatImage(req.getChat_image());
+		chat.setChatName(req.getChatName());
+		chat.setChatImage(req.getChatImage());
 		chat.setIs_group(true);
 
 
